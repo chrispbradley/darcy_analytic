@@ -1,5 +1,7 @@
 PROGRAM darcy_analytic
 
+  !PROGRAM LIBRARIES
+
   USE OpenCMISS
   USE OpenCMISS_Iron
 
@@ -94,6 +96,7 @@ PROGRAM darcy_analytic
   TYPE(cmfe_MeshElementsType) :: MeshElementsVelocity
   TYPE(cmfe_MeshElementsType) :: MeshElementsPressure
   TYPE(cmfe_MeshType) :: Mesh
+  TYPE(cmfe_GeneratedMeshType) :: GeneratedMesh
   TYPE(cmfe_DecompositionType) :: Decomposition
   TYPE(cmfe_FieldsType) :: Fields
   TYPE(cmfe_FieldType) :: GeometricField
@@ -101,7 +104,6 @@ PROGRAM darcy_analytic
   TYPE(cmfe_FieldType) :: DependentFieldDarcy
   TYPE(cmfe_FieldType) :: MaterialsFieldDarcy
   TYPE(cmfe_FieldType) :: AnalyticFieldDarcy
-  TYPE(cmfe_GeneratedMeshType) :: GeneratedMesh
   TYPE(cmfe_EquationsSetType) :: EquationsSetDarcy
   TYPE(cmfe_EquationsType) :: EquationsDarcy
   TYPE(cmfe_ProblemType) :: Problem
