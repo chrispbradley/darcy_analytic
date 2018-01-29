@@ -125,9 +125,9 @@ PROGRAM darcy_analytic
   ! PROBLEM CONTROL PANEL
   !-----------------------------------------------------------------------------------------------------------
 
-  NUMBER_GLOBAL_X_ELEMENTS=5
-  NUMBER_GLOBAL_Y_ELEMENTS=5
-  NUMBER_GLOBAL_Z_ELEMENTS=5
+  NUMBER_GLOBAL_X_ELEMENTS=3
+  NUMBER_GLOBAL_Y_ELEMENTS=3
+  NUMBER_GLOBAL_Z_ELEMENTS=3
   BASIS_TYPE=CMFE_BASIS_LINEAR_LAGRANGE_INTERPOLATION
   BASIS_XI_INTERPOLATION_GEOMETRY=CMFE_BASIS_LINEAR_LAGRANGE_INTERPOLATION
   BASIS_NUMBER_GEOMETRY=1
@@ -183,6 +183,7 @@ PROGRAM darcy_analytic
   !Start the creation of a new region
   CALL cmfe_Region_Initialise(Region,Err)
   CALL cmfe_Region_CreateStart(RegionUserNumber,WorldRegion,Region,Err)
+  CALL cmfe_Region_LabelSet(Region,"DarcyRegion",Err)
   !Set the regions coordinate system as defined above
   CALL cmfe_Region_CoordinateSystemSet(Region,CoordinateSystem,Err)
   !Finish the creation of the region
@@ -210,6 +211,7 @@ PROGRAM darcy_analytic
     CALL cmfe_Basis_QuadratureNumberOfGaussXiSet(BasisGeometry,[BASIS_XI_GAUSS_GEOMETRY,BASIS_XI_GAUSS_GEOMETRY, &
       & BASIS_XI_GAUSS_GEOMETRY],Err)
   ENDIF
+  CALL cmfe_Basis_QuadratureLocalFaceGaussEvaluateSet(BasisGeometry,.true.,Err)
   !Finish the creation of the basis
   CALL cmfe_Basis_CreateFinish(BasisGeometry,Err)
 
@@ -270,6 +272,9 @@ PROGRAM darcy_analytic
 
   !Finish creating the field
   CALL cmfe_Field_CreateFinish(GeometricField,Err)
+
+  !Update the geometric field parameters
+  CALL cmfe_GeneratedMesh_GeometricParametersCalculate(GeneratedMesh,GeometricField,Err)
 
   !-----------------------------------------------------------------------------------------------------------
   ! EQUATIONS SETS
@@ -446,13 +451,13 @@ PROGRAM darcy_analytic
   !Output Analytic Analysis
   CALL cmfe_AnalyticAnalysis_Output(DependentFieldDarcy,"DarcyAnalytic",Err)
 
-  EXPORT_FIELD_IO=.FALSE.
+  EXPORT_FIELD_IO=.TRUE.
   IF(EXPORT_FIELD_IO) THEN
     WRITE(*,'(A)') "Exporting fields..."
     CALL cmfe_Fields_Initialise(Fields,Err)
     CALL cmfe_Fields_Create(Region,Fields,Err)
-    CALL cmfe_Fields_NodesExport(Fields,"Darcy","FORTRAN",Err)
-    CALL cmfe_Fields_ElementsExport(Fields,"Darcy","FORTRAN",Err)
+    CALL cmfe_Fields_NodesExport(Fields,"darcy_analytic","FORTRAN",Err)
+    CALL cmfe_Fields_ElementsExport(Fields,"darcy_analytic","FORTRAN",Err)
     CALL cmfe_Fields_Finalise(Fields,Err)
     WRITE(*,'(A)') "Field exported!"
   ENDIF
