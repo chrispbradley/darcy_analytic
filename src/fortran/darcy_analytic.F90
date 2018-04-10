@@ -84,6 +84,7 @@ PROGRAM darcy_analytic
   !Program types
   TYPE(cmfe_RegionType) :: Region
   TYPE(cmfe_RegionType) :: WorldRegion
+  TYPE(cmfe_ComputationEnvironmentType) :: computationEnvironment
   TYPE(cmfe_CoordinateSystemType) :: CoordinateSystem
   TYPE(cmfe_CoordinateSystemType) :: WorldCoordinateSystem
   TYPE(cmfe_BasisType) :: BasisGeometry
